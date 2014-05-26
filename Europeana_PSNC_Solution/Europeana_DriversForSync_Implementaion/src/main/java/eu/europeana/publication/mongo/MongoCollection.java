@@ -39,10 +39,10 @@ import eu.europeana.publication.common.State;
 @Component("mongo")
 public class MongoCollection implements ICollection {
 	private MongoOperations mongoOperation;
-	private Class collectionName;
+	private IDocument collectionName;
 
 	
-	public MongoCollection(MongoOperations mongoOperation , Class collectionName) {
+	public MongoCollection(MongoOperations mongoOperation , IDocument collectionName) {
 		this.mongoOperation = mongoOperation;
 		this.collectionName=collectionName;
 	}
@@ -68,11 +68,9 @@ public class MongoCollection implements ICollection {
 		}
 		searchUserQuery.addCriteria(serachCreteria);
          
-        
-				
-		
-		List<IDocument> savedUser = mongoOperation.find(
-				searchUserQuery.limit(batch), collectionName);
+         
+		List<IDocument> savedUser = (List<IDocument>) mongoOperation.find (
+				searchUserQuery.limit(batch),collectionName.getClass());
 		Iterator<IDocument> it = savedUser.iterator();
 		List<IDocument> documentList = new ArrayList<IDocument>();
 
@@ -88,7 +86,7 @@ public class MongoCollection implements ICollection {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(id));
-		IDocument userTest2 = mongoOperation.findOne(query2, collectionName);
+		IDocument userTest2 = mongoOperation.findOne(query2, collectionName.getClass());
 
 		return userTest2;
 
@@ -104,7 +102,7 @@ public class MongoCollection implements ICollection {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(docuemnt.getId()));
-		IDocument userTest2 = mongoOperation.findOne(query2,collectionName);
+		IDocument userTest2 = mongoOperation.findOne(query2,collectionName.getClass());
 		mongoOperation.remove(userTest2);
 
 	}
@@ -113,7 +111,7 @@ public class MongoCollection implements ICollection {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(document.getId()));
-		IDocument userTest2 = mongoOperation.findOne(query2, collectionName);
+		IDocument userTest2 = mongoOperation.findOne(query2, collectionName.getClass());
 		if (userTest2 != null)
 			mongoOperation.save(document);
 		

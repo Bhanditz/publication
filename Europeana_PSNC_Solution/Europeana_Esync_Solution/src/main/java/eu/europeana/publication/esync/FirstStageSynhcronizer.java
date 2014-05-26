@@ -130,6 +130,7 @@ public class FirstStageSynhcronizer {
 			try {
 				Logging.log.info("commiting your changes to destination");
 				destinationCollection.commit();
+				Logging.log.info("synchronization and commiting your changes to destination were executed successfully ");
 			} catch (Exception e) {
 				completed = false;
 				Logging.log.error("an Exception happened when scommiting the changes to destination");

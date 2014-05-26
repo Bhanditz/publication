@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import com.mongodb.MongoClient;
 
+import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.mongo.MongoCollection;
 import eu.europeana.publication.solr.SolrCollection;
 
@@ -41,7 +42,7 @@ public class AppConfiguration1 {
 	public @Bean
 	(name="mongoCollection")
 	@Scope("prototype")
-	MongoCollection mongoTCollection(String host,int port ,String databaseName,String userName,String password,Class collectionName) throws Exception {
+	MongoCollection mongoTCollection(String host,int port ,String databaseName,String userName,String password,IDocument collectionName) throws Exception {
 		UserCredentials credintials =new UserCredentials(userName, password);
 		MongoCollection mongoCollection = new MongoCollection(mongoTemplate(host, port,databaseName,credintials),collectionName);
 		return mongoCollection;

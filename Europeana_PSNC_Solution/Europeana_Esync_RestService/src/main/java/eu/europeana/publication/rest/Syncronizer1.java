@@ -45,7 +45,7 @@ public class Syncronizer1 {
 		    @FormParam("sourcedatabasename") @DefaultValue("users")String sourceDatabaseName,
 			@FormParam("sourceusername") @DefaultValue("") String sourceUserName,
 			@FormParam("sourcepassword") @DefaultValue("")String sourcePassword,
-			@FormParam("collectionName") @DefaultValue("eu.europeana.publication.mongo.User")String collectionName,
+			@FormParam("collectionName") @DefaultValue("User")String collectionName,
 			@FormParam("collectionName") @DefaultValue("tote")String dataSet,
 						
 			@FormParam("destinationip") @DefaultValue("localhost")String destinationIp,
@@ -71,14 +71,18 @@ public class Syncronizer1 {
 		boolean completed = false;
 		try {
 			ApplicationContext context = new  AnnotationConfigApplicationContext(AppConfiguration1.class);
-				     
+			
+			
+			User u =new User(); 
 		  			ICollection sourceCollection = (ICollection) context.getBean(sourceType, sourceIp, sourcePort,
-							sourceDatabaseName,sourceUserName,sourcePassword,Class.forName(collectionName));
+							sourceDatabaseName,sourceUserName,sourcePassword,u);
+		  			System.out.println("between");
+		  			
 		  			
 			ICollection destinationCollection = (ICollection) context.getBean(destinationType, destinationIp, destinationPort,
-							destinationDatabaseName,destinationUserName,destinationPassword,Class.forName(collectionName));
+							destinationDatabaseName,destinationUserName,destinationPassword,u);
 
-		
+			System.out.println("sddddddddd");
 			FirstStageSynhcronizer syncronizer = new FirstStageSynhcronizer();
 
 			 sender = new RabbitMQSender("rabbitQueue3", rabbitMQIp, rabbitMQPort,rabbitMQUserName,rabbitMQPassword);
@@ -156,7 +160,7 @@ public class Syncronizer1 {
 		    @FormParam("sourcedatabasename") @DefaultValue("users")String sourceDatabaseName,
 			@FormParam("sourceusername") @DefaultValue("") String sourceUserName,
 			@FormParam("sourcepassword") @DefaultValue("")String sourcePassword,
-			@FormParam("collectionName") @DefaultValue("eu.europeana.publication.mongo.User")String collectionName,
+			@FormParam("collectionName") @DefaultValue("User")String collectionName,
 		
 						
 			@FormParam("destinationip") @DefaultValue("localhost")String destinationIp,
@@ -182,22 +186,23 @@ public class Syncronizer1 {
 		{
 		ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration1.class);
 		
+		
+		User u =new User(); 
+		
 		ICollection sourceCollection = (ICollection) context.getBean(sourceType, sourceIp, sourcePort,
-						sourceDatabaseName,sourceUserName,sourcePassword,Class.forName(collectionName));
+						sourceDatabaseName,sourceUserName,sourcePassword,u);
 		
 		RabbitMQReciever reciever = new RabbitMQReciever("rabbitQueue3",rabbitMQIp, rabbitMQPort,rabbitMQUserName,rabbitMQPassword);
 		
 		// map solrCollection (solrServer) to ICollection
-			
+		
+		
 		
 		ICollection destinationCollection = (ICollection) context.getBean(destinationType, destinationIp, destinationPort,
 				destinationDatabaseName,destinationUserName,destinationPassword);
 		
-				
 		SecondStageSycrhonizer synchronizer =new SecondStageSycrhonizer();
 		boolean completed =synchronizer.syncronize(sourceCollection,destinationCollection, reciever);
-		
-		
 		
 		if (completed == true)
 		{
