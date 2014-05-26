@@ -8,6 +8,7 @@ import com.rabbitmq.client.QueueingConsumer;
 
 import eu.europeana.publication.common.ICollection;
 import eu.europeana.publication.common.IDocument;
+import eu.europeana.publication.logging.Logging;
 import eu.europeana.publication.rabbitmq.RabbitMQReciever;
 import eu.europeana.publication.rabbitmq.RabbitMQServerUtility;
 
@@ -86,23 +87,24 @@ public class SecondStageSycrhonizer {
 
 				} catch (TimeoutException e) {
 					//System.out.println("timed out no data to be consumed");
-					
+					Logging.log.info("timed out no data to be consumed ");
 					//committing to destination if necessary
 					try {
-					
+						Logging.log.info("commiting your changes to destination");
 						destinationCollection.commit();
+						Logging.log.info("synchronization and commiting your changes to destination were executed successfully ");
 					} catch (Exception e1) {
 						completed = false;
-						
+						Logging.log.error("an error accoured during commiting ");
 						break;
 
 					}
-					
+					Logging.log.info("the synchronization completed successfully");
 					break;
 				} catch (Exception e) {
 					
 					e.printStackTrace();
-					
+					Logging.log.error("an exception happened when synchronizing to destination");
 					completed=false;
 					break;
 				}
@@ -114,7 +116,7 @@ public class SecondStageSycrhonizer {
 		} catch (IOException e) {
 			completed=false;
 			
-			//Logging.log.error("an IOException happened when synchronizing to destination it is related to RabbitMq");
+			Logging.log.error("an IOException happened when synchronizing to destination it is related to RabbitMq");
 
 		}
 		finally {
@@ -125,7 +127,7 @@ public class SecondStageSycrhonizer {
 			catch(IOException e)
 			{
 				//System.out.println("an exception just happened when trying to close the rabbitMQ reciever");
-				//Logging.log.error("an exception just happened when trying to close the rabbitMQ reciever");
+				Logging.log.error("an exception just happened when trying to close the rabbitMQ reciever");
 			}
 		}
 		

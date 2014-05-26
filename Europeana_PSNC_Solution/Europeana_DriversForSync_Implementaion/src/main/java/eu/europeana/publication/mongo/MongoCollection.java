@@ -68,7 +68,9 @@ public class MongoCollection implements ICollection {
 		}
 		searchUserQuery.addCriteria(serachCreteria);
          
-         
+        
+				
+		
 		List<IDocument> savedUser = mongoOperation.find(
 				searchUserQuery.limit(batch), collectionName);
 		Iterator<IDocument> it = savedUser.iterator();

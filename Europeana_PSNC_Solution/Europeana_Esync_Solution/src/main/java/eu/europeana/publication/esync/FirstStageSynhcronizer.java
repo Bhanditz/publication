@@ -8,6 +8,7 @@ import java.util.Map;
 import eu.europeana.publication.common.ICollection;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
+import eu.europeana.publication.logging.Logging;
 import eu.europeana.publication.rabbitmq.RabbitMQSender;
 
 
@@ -62,8 +63,7 @@ public class FirstStageSynhcronizer {
 		// this loop will break if there is no more documents to be synchronized
 		while (true) {
 			try {
-				System.out.println("tototototot");
-				patchNumber++;
+					patchNumber++;
 				copiedDocuments = spikeUtil
 						.getDocumentsByStateToBeSyncronizedUsingBatch(
 								sourceCollection, stateValues,queryChoices, batchSize);
@@ -75,8 +75,7 @@ public class FirstStageSynhcronizer {
 
 						IDocument document = iterator.next();
 						System.out.println(document.getId());
-						System.out.println("tototototot10");
-
+						
 						// if the document is not in destination collection,that
 						// mean, it is a new document.
 						if (!spikeUtil
@@ -85,25 +84,30 @@ public class FirstStageSynhcronizer {
 										destinationCollection, document, sender)) {
 
 							newDocuments.add(document);
-							System.out.println("tototototot5");
-
+							
 						}
 					}
 
 					if (newDocuments.size() == 0) {
+						Logging.log.info("the patch number : " + patchNumber
+								+ " was competed successfully");
 						
 					} else {
 						if (spikeUtil
 								.syncronizeInsertionOneByOne(newDocuments,
 										sourceCollection,
-										destinationCollection, sender) == true) {
-
+										destinationCollection, sender) ) {
+							
+							Logging.log.info("the patch number : "
+									+ patchNumber
+									+ " was competed successfully");
 							
 
 							newDocuments.clear();
 						} else {
 							completed = false;
-							
+							Logging.log
+							.error("an error accoured during inserting ");	
 							break;
 						}
 					}
@@ -112,8 +116,8 @@ public class FirstStageSynhcronizer {
 			} catch (Exception e) {
 				// System.out.println("batch number " + patchNumber
 				// + " failed please resynchronize");
-			
-
+				Logging.log.error("batch number " + patchNumber+ " failed please resynchronize");
+               // e.printStackTrace();
 				completed = false;
 				break;
 
@@ -124,9 +128,12 @@ public class FirstStageSynhcronizer {
 
 		if (completed == true) {
 			try {
+				Logging.log.info("commiting your changes to destination");
 				destinationCollection.commit();
 			} catch (Exception e) {
 				completed = false;
+				Logging.log.error("an Exception happened when scommiting the changes to destination");
+				//e.printStackTrace();
 				
 			}
 		}
