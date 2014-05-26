@@ -10,6 +10,7 @@
   	<module>Europeana_Esync_Solution</module>
   	<module>Europeana_DriversForSync_Implementaion</module>
     <module>Europeana_Esync_Rest</module>
+    <module>Europeana_Esync_RestService</module>
   </modules>
   
   

@@ -8,12 +8,11 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>eu.europeana.publication.rest</groupId>
-  <artifactId>Europeana_Esync_Rest</artifactId>
+  <artifactId>Europeana_Esync_RestService</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>Europeana_Esync_Rest Maven Webapp</name>
+  <name>Europeana_Esync_RestService Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -21,9 +20,8 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-       
     
-  <dependency>
+    <dependency>
   <groupId>eu.europeana.publication.implementation</groupId>
   <artifactId>Europeana_DriversForSync_Implementaion</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -37,10 +35,8 @@
   
   </dependency>
   
-
-  
   </dependencies>
   <build>
-    <finalName>Europeana_Esync_Rest</finalName>
+    <finalName>Europeana_Esync_RestService</finalName>
   </build>
 </project>
