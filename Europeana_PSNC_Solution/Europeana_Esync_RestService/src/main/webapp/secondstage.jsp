@@ -2,7 +2,7 @@
 <body>
 <h2>Hello World!</h2>
 
-<form action="rest/synchronization1/secondStage" method="post">
+<form action="rest/synchronization/secondStage" method="post">
 <table>
   <tr>
      <td>source host ip :</td>

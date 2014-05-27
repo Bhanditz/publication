@@ -13,7 +13,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -23,12 +22,11 @@ import eu.europeana.publication.common.State;
 import eu.europeana.publication.configuration.AppConfiguration1;
 import eu.europeana.publication.esync.FirstStageSynhcronizer;
 import eu.europeana.publication.esync.SecondStageSycrhonizer;
-import eu.europeana.publication.mongo.User;
 import eu.europeana.publication.rabbitmq.RabbitMQReciever;
 import eu.europeana.publication.rabbitmq.RabbitMQSender;
 
-@Path("/synchronization1")
-public class Syncronizer1 {
+@Path("/synchronization")
+public class Syncronizer {
 
 	@POST
 	@Path("/firstStage")
