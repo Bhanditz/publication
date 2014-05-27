@@ -13,6 +13,7 @@ import com.mongodb.MongoClient;
 
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.mongo.MongoCollection;
+import eu.europeana.publication.mongo.User;
 import eu.europeana.publication.solr.SolrCollection;
 
 public class AppConfiguration1 {
@@ -25,6 +26,15 @@ public class AppConfiguration1 {
 		
 		return new SimpleMongoDbFactory (new MongoClient(host, port),
 				databaseName,credintials);
+	}
+	
+	public @Bean
+	(name="User")
+	@Scope("prototype")
+	
+	IDocument createUser() throws Exception {
+		
+		return new User();
 	}
 
 	public @Bean

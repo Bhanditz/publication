@@ -112,23 +112,24 @@ public class FirstStageUtility {
 
 			} else
 
-			if (sourceDocument.getState().equals(State.TO_BE_DELETED)) {
-				destinationCollection.deleteDocument(destinationDocument
-						);
-				sourceDocument.setState(State.DELETED);
-				
-				queueForRabbitMQ.put(destinationDocument.getId(), "delete");
+				if (sourceDocument.getState().equals(State.TO_BE_DELETED)) {
+					destinationDocument.setState(State.DELETED);
+					sourceDocument.setState(State.DELETED);
+					destinationCollection
+					.updateDocumentUsingId(destinationDocument);
+					
+					queueForRabbitMQ.put(destinationDocument.getId(), "delete");
 
-			}
+				}
 
-			else if (sourceDocument.getState().equals(State.TO_BE_WITHDRAWN)) {
-				destinationCollection.deleteDocument(destinationDocument
-						);
-				sourceDocument.setState(State.FOR_EDITING);
-				
-				queueForRabbitMQ.put(destinationDocument.getId(), "delete");
-			}
-
+				else if (sourceDocument.getState().equals(State.TO_BE_WITHDRAWN)) {
+					destinationDocument.setState(State.DELETED);
+					sourceDocument.setState(State.FOR_EDITING);
+					destinationCollection
+					.updateDocumentUsingId(destinationDocument);
+					
+					queueForRabbitMQ.put(destinationDocument.getId(), "delete");
+				}
 			sourceCollection.updateDocumentUsingId(sourceDocument);
 			
 			

@@ -1,6 +1,5 @@
 package eu.europeana.publication.rest;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import eu.europeana.publication.common.ICollection;
+import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
 import eu.europeana.publication.configuration.AppConfiguration1;
 import eu.europeana.publication.esync.FirstStageSynhcronizer;
@@ -27,66 +27,59 @@ import eu.europeana.publication.mongo.User;
 import eu.europeana.publication.rabbitmq.RabbitMQReciever;
 import eu.europeana.publication.rabbitmq.RabbitMQSender;
 
-
-
-
-
-
-
-
 @Path("/synchronization1")
 public class Syncronizer1 {
 
 	@POST
 	@Path("/firstStage")
 	public Response syncronize(
-		    @FormParam("sourceip") @DefaultValue("localhost") String sourceIp,
-		    @FormParam("sourceport")  @DefaultValue("27017") int sourcePort,
-		    @FormParam("sourcedatabasename") @DefaultValue("users")String sourceDatabaseName,
+			@FormParam("sourceip") @DefaultValue("localhost") String sourceIp,
+			@FormParam("sourceport") @DefaultValue("27017") int sourcePort,
+			@FormParam("sourcedatabasename") @DefaultValue("users") String sourceDatabaseName,
 			@FormParam("sourceusername") @DefaultValue("") String sourceUserName,
-			@FormParam("sourcepassword") @DefaultValue("")String sourcePassword,
-			@FormParam("collectionName") @DefaultValue("User")String collectionName,
-			@FormParam("collectionName") @DefaultValue("tote")String dataSet,
-						
-			@FormParam("destinationip") @DefaultValue("localhost")String destinationIp,
+			@FormParam("sourcepassword") @DefaultValue("") String sourcePassword,
+			@FormParam("collectionName") @DefaultValue("User") String collectionName,
+			@FormParam("collectionName") @DefaultValue("tote") String dataSet,
+
+			@FormParam("destinationip") @DefaultValue("localhost") String destinationIp,
 			@FormParam("destinationport") @DefaultValue("27018") int destinationPort,
 			@FormParam("destinationdatabase_name") @DefaultValue("users") String destinationDatabaseName,
-			@FormParam("destinationusername") @DefaultValue("")  String destinationUserName,
+			@FormParam("destinationusername") @DefaultValue("") String destinationUserName,
 			@FormParam("destinationpassword") @DefaultValue("") String destinationPassword,
-			
-			@FormParam("rabbitmqip") @DefaultValue("localhost")  String rabbitMQIp,
+
+			@FormParam("rabbitmqip") @DefaultValue("localhost") String rabbitMQIp,
 			@FormParam("rabbitmqport") @DefaultValue("5672") int rabbitMQPort,
 			@FormParam("rabbitmqusername") @DefaultValue("guest") String rabbitMQUserName,
 			@FormParam("rabbitmqpassword") @DefaultValue("guest") String rabbitMQPassword,
-			
+
 			@FormParam("batchsize") @DefaultValue("5") int batchSize,
 			@FormParam("states") @DefaultValue("all") List<String> stateKeys,
-	
-        	@FormParam("sourcetype") @DefaultValue("mongoCollection") String sourceType,
-	        @FormParam("destinationtype") @DefaultValue("mongoCollection") String destinationType )
-	
+
+			@FormParam("sourcetype") @DefaultValue("mongoCollection") String sourceType,
+			@FormParam("destinationtype") @DefaultValue("mongoCollection") String destinationType)
 
 	{
-		RabbitMQSender sender =null;
+		RabbitMQSender sender = null;
 		boolean completed = false;
 		try {
-			ApplicationContext context = new  AnnotationConfigApplicationContext(AppConfiguration1.class);
-			
-			
-			User u =new User(); 
-		  			ICollection sourceCollection = (ICollection) context.getBean(sourceType, sourceIp, sourcePort,
-							sourceDatabaseName,sourceUserName,sourcePassword,u);
-		  			System.out.println("between");
-		  			
-		  			
-			ICollection destinationCollection = (ICollection) context.getBean(destinationType, destinationIp, destinationPort,
-							destinationDatabaseName,destinationUserName,destinationPassword,u);
+			ApplicationContext context = new AnnotationConfigApplicationContext(
+					AppConfiguration1.class);
 
-			System.out.println("sddddddddd");
+			IDocument document = (IDocument) context.getBean(collectionName);
+
+			ICollection sourceCollection = (ICollection) context.getBean(
+					sourceType, sourceIp, sourcePort, sourceDatabaseName,
+					sourceUserName, sourcePassword, document);
+
+			ICollection destinationCollection = (ICollection) context.getBean(
+					destinationType, destinationIp, destinationPort,
+					destinationDatabaseName, destinationUserName,
+					destinationPassword, document);
+
 			FirstStageSynhcronizer syncronizer = new FirstStageSynhcronizer();
 
-			 sender = new RabbitMQSender("rabbitQueue3", rabbitMQIp, rabbitMQPort,rabbitMQUserName,rabbitMQPassword);
-			
+			sender = new RabbitMQSender("rabbitQueue3", rabbitMQIp,
+					rabbitMQPort, rabbitMQUserName, rabbitMQPassword);
 
 			List<State> stateValues = new ArrayList<State>();
 			if (stateKeys.get(0).toString().equalsIgnoreCase("All")) {
@@ -100,30 +93,24 @@ public class Syncronizer1 {
 							.valueOf(iterator.next().toUpperCase()));
 				}
 			}
-  
-			
-			List<String> choices =new ArrayList<String>();
+
+			List<String> choices = new ArrayList<String>();
 			choices.add("tote");
 			choices.add("lala");
-			Map<String,List<String>> map =new HashMap<String,List<String>>();
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
 			map.put("dataSet", choices);
-			
-			
-			completed = syncronizer.syncronizeToProduction(
-					sourceCollection, destinationCollection,
-					stateValues,map, batchSize, sender);
 
-			if (completed == true)
-			{
-				//Logging.log.info("The syncronization was completed succsessfully");
+			completed = syncronizer.syncronizeToProduction(sourceCollection,
+					destinationCollection, stateValues, map, batchSize, sender);
+
+			if (completed == true) {
+				// Logging.log.info("The syncronization was completed succsessfully");
 				return Response
 						.status(200)
 						.entity("The syncronization was completed succsessfully")
 						.build();
-			}
-			else
-			{
-				//Logging.log.error("The syncronization was not completed succsessfully !! ..please resencronize");
+			} else {
+				// Logging.log.error("The syncronization was not completed succsessfully !! ..please resencronize");
 				return Response
 						.status(417)
 						.entity("The syncronization was not completed succsessfully !! ..please resencronize")
@@ -131,100 +118,90 @@ public class Syncronizer1 {
 			}
 
 		} catch (Exception e) {
-			//Logging.log.error("an exception happened !!");
+			// Logging.log.error("an exception happened !!");
 			e.printStackTrace();
 			return Response.status(417).entity("an exception happened !!")
 					.build();
-		}
-		finally
-		{
-			try
-			{
-			if (sender!=null)
-				sender.close();
-			}
-			catch (IOException e)
-			{
-				//Logging.log.error("an error happened when closing RabbitMQ sender");
+		} finally {
+			try {
+				if (sender != null)
+					sender.close();
+			} catch (IOException e) {
+				// Logging.log.error("an error happened when closing RabbitMQ sender");
 			}
 		}
 	}
-	
-	
-	
+
 	@POST
 	@Path("/secondStage")
 	public Response syncronize2(
 			@FormParam("sourceip") @DefaultValue("localhost") String sourceIp,
-		    @FormParam("sourceport")  @DefaultValue("27018") int sourcePort,
-		    @FormParam("sourcedatabasename") @DefaultValue("users")String sourceDatabaseName,
+			@FormParam("sourceport") @DefaultValue("27018") int sourcePort,
+			@FormParam("sourcedatabasename") @DefaultValue("users") String sourceDatabaseName,
 			@FormParam("sourceusername") @DefaultValue("") String sourceUserName,
-			@FormParam("sourcepassword") @DefaultValue("")String sourcePassword,
-			@FormParam("collectionName") @DefaultValue("User")String collectionName,
-		
-						
-			@FormParam("destinationip") @DefaultValue("localhost")String destinationIp,
+			@FormParam("sourcepassword") @DefaultValue("") String sourcePassword,
+			@FormParam("collectionName") @DefaultValue("User") String collectionName,
+
+			@FormParam("destinationip") @DefaultValue("localhost") String destinationIp,
 			@FormParam("destinationport") @DefaultValue("8983") int destinationPort,
 			@FormParam("destinationdatabase_name") @DefaultValue("") String destinationDatabaseName,
-			@FormParam("destinationusername") @DefaultValue("")  String destinationUserName,
+			@FormParam("destinationusername") @DefaultValue("") String destinationUserName,
 			@FormParam("destinationpassword") @DefaultValue("") String destinationPassword,
-			
-			@FormParam("rabbitmqip") @DefaultValue("localhost")  String rabbitMQIp,
+
+			@FormParam("rabbitmqip") @DefaultValue("localhost") String rabbitMQIp,
 			@FormParam("rabbitmqport") @DefaultValue("5672") int rabbitMQPort,
 			@FormParam("rabbitmqusername") @DefaultValue("guest") String rabbitMQUserName,
 			@FormParam("rabbitmqpassword") @DefaultValue("guest") String rabbitMQPassword,
-			
-		
-	
-        	@FormParam("sourcetype") @DefaultValue("mongoCollection") String sourceType,
-	        @FormParam("destinationtype") @DefaultValue("solrCollection") String destinationType
-			
-			
-			)
-	{
-		try
-		{
-		ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration1.class);
-		
-		
-		User u =new User(); 
-		
-		ICollection sourceCollection = (ICollection) context.getBean(sourceType, sourceIp, sourcePort,
-						sourceDatabaseName,sourceUserName,sourcePassword,u);
-		
-		RabbitMQReciever reciever = new RabbitMQReciever("rabbitQueue3",rabbitMQIp, rabbitMQPort,rabbitMQUserName,rabbitMQPassword);
-		
-		// map solrCollection (solrServer) to ICollection
-		
-		
-		
-		ICollection destinationCollection = (ICollection) context.getBean(destinationType, destinationIp, destinationPort,
-				destinationDatabaseName,destinationUserName,destinationPassword);
-		
-		SecondStageSycrhonizer synchronizer =new SecondStageSycrhonizer();
-		boolean completed =synchronizer.syncronize(sourceCollection,destinationCollection, reciever);
-		
-		if (completed == true)
-		{
-			destinationCollection.commit();
-		//	Logging.log.info("The documents were indexed  succsessfully to Destination");
-			return Response.status(200).entity("The documents were indexed  succsessfully to Destination").build();
-		}
-		else
-		{
-			//Logging.log.error("The syncronization was not completed succsessfully !! ..please resencronize");
-			return Response
-					.status(417)
-					.entity("The syncronization was not completed succsessfully !! ..please resencronize")
+
+			@FormParam("sourcetype") @DefaultValue("mongoCollection") String sourceType,
+			@FormParam("destinationtype") @DefaultValue("solrCollection") String destinationType
+
+	) {
+		try {
+			ApplicationContext context = new AnnotationConfigApplicationContext(
+					AppConfiguration1.class);
+
+			IDocument document = (IDocument) context.getBean(collectionName);
+
+			ICollection sourceCollection = (ICollection) context.getBean(
+					sourceType, sourceIp, sourcePort, sourceDatabaseName,
+					sourceUserName, sourcePassword, document);
+
+			RabbitMQReciever reciever = new RabbitMQReciever("rabbitQueue3",
+					rabbitMQIp, rabbitMQPort, rabbitMQUserName,
+					rabbitMQPassword);
+
+			// map solrCollection (solrServer) to ICollection
+
+			ICollection destinationCollection = (ICollection) context.getBean(
+					destinationType, destinationIp, destinationPort,
+					destinationDatabaseName, destinationUserName,
+					destinationPassword);
+
+			SecondStageSycrhonizer synchronizer = new SecondStageSycrhonizer();
+			boolean completed = synchronizer.syncronize(sourceCollection,
+					destinationCollection, reciever);
+
+			if (completed == true) {
+				destinationCollection.commit();
+				// Logging.log.info("The documents were indexed  succsessfully to Destination");
+				return Response
+						.status(200)
+						.entity("The documents were indexed  succsessfully to Destination")
+						.build();
+			} else {
+				// Logging.log.error("The syncronization was not completed succsessfully !! ..please resencronize");
+				return Response
+						.status(417)
+						.entity("The syncronization was not completed succsessfully !! ..please resencronize")
+						.build();
+			}
+		} catch (Exception e) {
+			// Logging.log.error("an exception happened in servers initiation !!");
+			return Response.status(417)
+					.entity("an exception happened in servers initiation !!")
 					.build();
 		}
-		}
-		catch(Exception e)
-		{
-			//Logging.log.error("an exception happened in servers initiation !!");
-			return Response.status(417).entity("an exception happened in servers initiation !!")
-					.build();	
-		}
-		
+
 	}
 }
