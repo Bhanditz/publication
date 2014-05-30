@@ -8,9 +8,7 @@ import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-
 import com.mongodb.MongoClient;
-
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.mongo.MongoCollection;
 import eu.europeana.publication.mongo.User;
@@ -26,15 +24,6 @@ public class AppConfiguration1 {
 		
 		return new SimpleMongoDbFactory (new MongoClient(host, port),
 				databaseName,credintials);
-	}
-	
-	public @Bean
-	(name="User")
-	@Scope("prototype")
-	
-	IDocument createUser() throws Exception {
-		
-		return new User();
 	}
 
 	public @Bean
@@ -59,6 +48,17 @@ public class AppConfiguration1 {
 
 	}
 	
+	public @Bean
+	(name="User")
+	@Scope("prototype")
+	
+	IDocument createUser() throws Exception {
+		
+		return new User();
+	}
+
+	
+	
 	
 	@Bean
 	@Scope("prototype")
@@ -75,12 +75,14 @@ public class AppConfiguration1 {
 	@Scope("prototype")
 	
 	public SolrCollection solrCollection(String host, int port,
-			String databaseName,String userName,String password) throws Exception
+			String databaseName,String userName,String password,IDocument collectionName) throws Exception
 	{
 		
 		return new SolrCollection(solrServer(host, port,
 				databaseName,userName,password));
 	}
+	
+
 	
 	
 	

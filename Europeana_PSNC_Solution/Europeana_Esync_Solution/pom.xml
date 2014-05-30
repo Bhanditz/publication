@@ -5,6 +5,7 @@
     <artifactId>Europeana_PSNC_Solution</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
+  
   <groupId>eu.europeana.publication.esync</groupId>
   <artifactId>Europeana_Esync_Solution</artifactId>
   
