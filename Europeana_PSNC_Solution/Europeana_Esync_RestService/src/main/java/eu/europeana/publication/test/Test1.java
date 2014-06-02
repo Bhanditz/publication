@@ -68,8 +68,7 @@ public class Test1 {
 				
 				form.add("sourceusername", "");    
 				form.add("sourcepassword", "");    
-				form.add("collectionName", "User");
-								
+												
 				form.add("destinationip", "localhost");    
 				form.add("destinationport", "8983");    
 				form.add("destinationdatabase_name", ""); 
@@ -86,8 +85,16 @@ public class Test1 {
 				form.add("destinationtype", "solrCollection");  
 				
 				
-				response = service.type(MediaType.APPLICATION_XML)
-						.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, form);
+				 response = service.type(MediaType.APPLICATION_XML)
+							.accept(MediaType.APPLICATION_XML).header("sourceip", "localhost").header("sourceport", "27018").
+							header("sourcedatabasename", "users").header("sourceusername", "").header("sourcepassword", "").
+							header("destinationip", "localhost").
+							header("destinationport", "8983").header("destinationdatabase_name", "").
+							header("destinationusername", "").header("destinationpassword", "").
+							header("rabbitmqip", "localhost").header("rabbitmqport", "5672").
+							header("rabbitmqusername", "guest").header("rabbitmqpassword", "guest").
+							header("sourcetype", "mongoCollection").header("destinationtype", "solrCollection").
+							post(ClientResponse.class, map);
 				
 				System.out.println(response.getEntity(String.class));
 				

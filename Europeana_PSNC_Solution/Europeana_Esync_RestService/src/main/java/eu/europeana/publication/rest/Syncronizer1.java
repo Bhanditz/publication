@@ -143,28 +143,29 @@ public class Syncronizer1 {
 	@POST
 	@Path("/secondStage")
 	public Response syncronize2(
-			@FormParam("sourceip") @DefaultValue("localhost") String sourceIp,
-			@FormParam("sourceport") @DefaultValue("27018") int sourcePort,
-			@FormParam("sourcedatabasename") @DefaultValue("users") String sourceDatabaseName,
-			@FormParam("sourceusername") @DefaultValue("") String sourceUserName,
-			@FormParam("sourcepassword") @DefaultValue("") String sourcePassword,
-			@FormParam("collectionName") @DefaultValue("User") String collectionName,
-			
+			QueryChoicesMap<String, List<String>> map1,
+			@HeaderParam("sourceip") @DefaultValue("localhost") String sourceIp,
+			@HeaderParam("sourceport") @DefaultValue("27017") int sourcePort,
+			@HeaderParam("sourcedatabasename") @DefaultValue("users") String sourceDatabaseName,
+			@HeaderParam("sourceusername") @DefaultValue("") String sourceUserName,
+			@HeaderParam("sourcepassword") @DefaultValue("") String sourcePassword,
 
-			@FormParam("destinationip") @DefaultValue("localhost") String destinationIp,
-			@FormParam("destinationport") @DefaultValue("8983") int destinationPort,
-			@FormParam("destinationdatabase_name") @DefaultValue("") String destinationDatabaseName,
-			@FormParam("destinationusername") @DefaultValue("") String destinationUserName,
-			@FormParam("destinationpassword") @DefaultValue("") String destinationPassword,
+			@HeaderParam("destinationip") @DefaultValue("localhost") String destinationIp,
+			@HeaderParam("destinationport") @DefaultValue("27018") int destinationPort,
+			@HeaderParam("destinationdatabase_name") @DefaultValue("users") String destinationDatabaseName,
+			@HeaderParam("destinationusername") @DefaultValue("") String destinationUserName,
+			@HeaderParam("destinationpassword") @DefaultValue("") String destinationPassword,
 
-			@FormParam("rabbitmqip") @DefaultValue("localhost") String rabbitMQIp,
-			@FormParam("rabbitmqport") @DefaultValue("5672") int rabbitMQPort,
-			@FormParam("rabbitmqusername") @DefaultValue("guest") String rabbitMQUserName,
-			@FormParam("rabbitmqpassword") @DefaultValue("guest") String rabbitMQPassword,
+			@HeaderParam("rabbitmqip") @DefaultValue("localhost") String rabbitMQIp,
+			@HeaderParam("rabbitmqport") @DefaultValue("5672") int rabbitMQPort,
+			@HeaderParam("rabbitmqusername") @DefaultValue("guest") String rabbitMQUserName,
+			@HeaderParam("rabbitmqpassword") @DefaultValue("guest") String rabbitMQPassword,
 
-			@FormParam("sourcetype") @DefaultValue("mongoCollection") String sourceType,
-			@FormParam("destinationtype") @DefaultValue("solrCollection") String destinationType
+			@HeaderParam("batchsize") @DefaultValue("5") int batchSize,
+			@HeaderParam("states") @DefaultValue("all") List<String> stateKeys,
 
+			@HeaderParam("sourcetype") @DefaultValue("mongoCollection") String sourceType,
+			@HeaderParam("destinationtype") @DefaultValue("mongoCollection") String destinationType
 	)
 
 	{
@@ -174,8 +175,13 @@ public class Syncronizer1 {
 			ApplicationContext context = new AnnotationConfigApplicationContext(
 					AppConfiguration1.class);
 
-			if (collectionName != null)
-				document = (IDocument) context.getBean(collectionName);
+			if (map1.getMapProperty().get("collection") != null)
+			{
+				System.out.println(map1.getMapProperty()
+						.get("collection").get(0).toString());
+				document = (IDocument) context.getBean(map1.getMapProperty()
+						.get("collection").get(0).toString());
+			}
 
 			ICollection sourceCollection = (ICollection) context.getBean(
 					sourceType, sourceIp, sourcePort, sourceDatabaseName,
