@@ -39,7 +39,6 @@ public class Syncronizer1 {
 			@HeaderParam("sourcedatabasename") @DefaultValue("users") String sourceDatabaseName,
 			@HeaderParam("sourceusername") @DefaultValue("") String sourceUserName,
 			@HeaderParam("sourcepassword") @DefaultValue("") String sourcePassword,
-			@HeaderParam("collectionName") @DefaultValue("User") String collectionName,
 
 			@HeaderParam("destinationip") @DefaultValue("localhost") String destinationIp,
 			@HeaderParam("destinationport") @DefaultValue("27018") int destinationPort,
@@ -68,9 +67,13 @@ public class Syncronizer1 {
 			ApplicationContext context = new AnnotationConfigApplicationContext(
 					AppConfiguration1.class);
 
-			if (collectionName != null)
-				document = (IDocument) context.getBean(collectionName);
-
+			if (map1.getMapProperty().get("collection") != null)
+			{
+				System.out.println(map1.getMapProperty()
+						.get("collection").get(0).toString());
+				document = (IDocument) context.getBean(map1.getMapProperty()
+						.get("collection").get(0).toString());
+			}
 			ICollection sourceCollection = (ICollection) context.getBean(
 					sourceType, sourceIp, sourcePort, sourceDatabaseName,
 					sourceUserName, sourcePassword, document);
@@ -146,6 +149,7 @@ public class Syncronizer1 {
 			@FormParam("sourceusername") @DefaultValue("") String sourceUserName,
 			@FormParam("sourcepassword") @DefaultValue("") String sourcePassword,
 			@FormParam("collectionName") @DefaultValue("User") String collectionName,
+			
 
 			@FormParam("destinationip") @DefaultValue("localhost") String destinationIp,
 			@FormParam("destinationport") @DefaultValue("8983") int destinationPort,

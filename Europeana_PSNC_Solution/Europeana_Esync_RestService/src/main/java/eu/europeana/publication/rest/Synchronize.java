@@ -43,8 +43,10 @@ public class Synchronize {
 					ApplicationContext context = new  AnnotationConfigApplicationContext(AppConfiguration1.class);
 					
 					
-					  if (wrapper.getOtherBean().getCollectionName()!=null)
-					 document = (IDocument) context.getBean(wrapper.getOtherBean().getCollectionName());
+					
+                    if (wrapper.getOtherBean().getQueryChoices().getMapProperty().get("collection")!=null)
+   					 document = (IDocument) context.getBean(wrapper.getOtherBean().getQueryChoices().getMapProperty().get("collection").get(0));
+
 
 			    
 			    	ICollection sourceCollection = (ICollection) context.getBean(
@@ -120,8 +122,8 @@ public class Synchronize {
                     ApplicationContext context = new  AnnotationConfigApplicationContext(AppConfiguration1.class);
 					
 					
-                    if (wrapper.getOtherBean().getCollectionName()!=null)
-   					 document = (IDocument) context.getBean(wrapper.getOtherBean().getCollectionName());
+                    if (wrapper.getOtherBean().getQueryChoices().getMapProperty().get("collection")!=null)
+   					 document = (IDocument) context.getBean(wrapper.getOtherBean().getQueryChoices().getMapProperty().get("collection").get(0));
 
 			     	
 			    	ICollection sourceCollection = (ICollection) context.getBean(

@@ -50,10 +50,14 @@ public class Test {
 		alist.add("tote");
 		alist.add("tata");
 		map.getMapProperty().put("dataSet", alist);
+		List<String> blist = new ArrayList<String>();
+		blist.add("User");
+		map.getMapProperty().put("collection", blist);
+		
+		
 
 		SynchronizationParametersConfBean other = new SynchronizationParametersConfBean();
 		other.setBatchSize(5);
-		other.setCollectionName("User");
 		other.setDestinationType("Mongo");
 		other.setQueryChoices(map);
 		other.setSourceType("mongoCollection");
@@ -79,7 +83,7 @@ public class Test {
 
 		System.out.println(response.getEntity(String.class));
 		
-		
+	
 	//Stage two
 		service = client
 				.resource("http://localhost:8080/Europeana_Esync_RestService/rest/synchronization/secondStage");

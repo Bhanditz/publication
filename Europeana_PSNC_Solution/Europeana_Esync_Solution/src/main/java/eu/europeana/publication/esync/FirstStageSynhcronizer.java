@@ -116,6 +116,7 @@ public class FirstStageSynhcronizer {
 			} catch (Exception e) {
 				// System.out.println("batch number " + patchNumber
 				// + " failed please resynchronize");
+				e.printStackTrace();
 				Logging.log.error("batch number " + patchNumber+ " failed please resynchronize");
                // e.printStackTrace();
 				completed = false;

@@ -17,7 +17,6 @@ import eu.europeana.publication.utility.mapconverter.QueryChoicesMap;
 @XmlRootElement(name = "Other")
 public class SynchronizationParametersConfBean {
 	  
-		private String collectionName;
 		private QueryChoicesMap<String, List<String>> queryChoices ;
 		private int batchSize;
 		private List<State> stateKeys;
@@ -30,13 +29,7 @@ public class SynchronizationParametersConfBean {
   	    }
   	    
   	    
-        public String getCollectionName() {
-			return collectionName;
-		}
-        @XmlElement
-		public void setCollectionName(String collectionName) {
-			this.collectionName = collectionName;
-		}
+     
 		public QueryChoicesMap<String, List<String>> getQueryChoices() {
 			return queryChoices;
 		}

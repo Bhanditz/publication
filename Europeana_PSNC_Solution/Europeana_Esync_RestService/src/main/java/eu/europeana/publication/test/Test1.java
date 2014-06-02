@@ -32,7 +32,10 @@ public class Test1 {
 				alist.add("tote");
 				alist.add("tata");
 				map.getMapProperty().put("dataSet", alist);
-
+				
+				List<String> blist = new ArrayList<String>();
+				blist.add("User");
+				map.getMapProperty().put("collection", blist);
 				
 				
 				List<String> states =new ArrayList<String>();
@@ -44,7 +47,7 @@ public class Test1 {
 				ClientResponse response = service.type(MediaType.APPLICATION_XML)
 						.accept(MediaType.APPLICATION_XML).header("sourceip", "localhost").header("sourceport", "27017").
 						header("sourcedatabasename", "users").header("sourceusername", "").header("sourcepassword", "").
-						header("collectionName", "User").header("destinationip", "localhost").
+						header("destinationip", "localhost").
 						header("destinationport", "27018").header("destinationdatabase_name", "users").
 						header("destinationusername", "").header("destinationpassword", "").
 						header("rabbitmqip", "localhost").header("rabbitmqport", "5672").
@@ -65,8 +68,8 @@ public class Test1 {
 				
 				form.add("sourceusername", "");    
 				form.add("sourcepassword", "");    
-				form.add("collectionName", "User");  
-				
+				form.add("collectionName", "User");
+								
 				form.add("destinationip", "localhost");    
 				form.add("destinationport", "8983");    
 				form.add("destinationdatabase_name", ""); 

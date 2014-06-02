@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.directory.SearchControls;
+
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.springframework.data.mongodb.MongoDbFactory;
@@ -57,16 +59,26 @@ public class MongoCollection implements ICollection {
 			int batch) {
 
 		Query searchUserQuery = new Query();
+		List<Criteria> searchQueryList =new ArrayList<Criteria>();
 		
 		State[] stateValuesToArray = stateVlues.toArray(new State[stateVlues.size()]);
 		Criteria serachCreteria =Criteria.where("state").in(stateValuesToArray);
+		searchQueryList.add(serachCreteria);
 		
 		for (String key : queryChoices.keySet()) {
+			if (!key.equals("collection"))
+			{
 		String[] queryChoicesValue=	queryChoices.get(key).toArray(new String[queryChoices.get(key).size()]);
-			serachCreteria =serachCreteria.andOperator(Criteria.where(key).in(queryChoicesValue));
+		    serachCreteria =Criteria.where(key).in(queryChoicesValue);
+		searchQueryList.add(serachCreteria)  ;  
+			}
 			
 		}
-		searchUserQuery.addCriteria(serachCreteria);
+		
+		for (Criteria c : searchQueryList)
+		{
+		searchUserQuery.addCriteria(c);
+		}
          
          
 		List<IDocument> savedUser = (List<IDocument>) mongoOperation.find (
