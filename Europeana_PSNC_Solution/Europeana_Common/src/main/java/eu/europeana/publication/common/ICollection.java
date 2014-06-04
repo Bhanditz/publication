@@ -23,14 +23,14 @@ public interface ICollection {
 	 *@param stateValues
 	 *                 list of state filed values for documents which will be returned
 	 *@param queryChoices
-	 *                  map with attributes and list of values of it
-	 *                  this attributes could be used to query the needed
-	 *                  documents to be synchronized 
+	 *      		    map with keys and 
+						list of values related to those keys ,this variable could be used to specify the  query 
+						when selecting the documents to be synchronized .Examples of keys will be (collection -dataSet
 	 *                                   
 	 *@param   batchSize
 	 *                 the number of documents which will be returned   
 	 * 
-	 *@return  batch of list of documents                
+	 *@return   list of documents                 
 	 */                     
 	abstract public List<IDocument> getDocumentsByStatesUsingBatch(
 			List<State> stateVlues,Map<String ,List<String>> queryChoices , int batchSize);
