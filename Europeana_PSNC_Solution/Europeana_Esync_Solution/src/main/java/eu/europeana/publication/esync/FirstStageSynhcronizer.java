@@ -39,6 +39,10 @@ public class FirstStageSynhcronizer {
 	 *            synchronized
 	 * @param batchSize
 	 *            the number of documents which will be synchronized every batch
+	 * @param queryChoices
+	 *     	      map with keys and 
+				  list of values related to each of those keys, this variable could be used to specify the (where clause) query filter
+		    	  when selecting the documents to be synchronized .Examples of such keys will be (collection -dataSet
 	 * 
 	 * @param sender
 	 *            RabbitMQ sender which will be used to save/publish the

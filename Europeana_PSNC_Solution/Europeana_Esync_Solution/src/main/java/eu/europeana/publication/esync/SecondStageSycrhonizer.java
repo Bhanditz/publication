@@ -28,7 +28,8 @@ public class SecondStageSycrhonizer {
 	 * consume the documents Ids from RabbitMQ receiver with its related
 	 * operation (insert update delete) use those Ids to query and return
 	 * documents from the source collection before synchronizing them to the
-	 * destination collection TimeoutException will accrued only if there is no
+	 * destination collection.
+	 * TimeoutException will accrued only if there is no
 	 * more data to consume from the RabbitMQ which mean the data consumed
 	 * correctly
 	 * 

@@ -155,12 +155,12 @@ public class FirstStageUtility {
 	 *@param destinationCollection 
 	 *                     The ICollection implementation for the production collection which will contain the synchronized documents 
 	 *@param newDocuments
-	 *                  List of Documents which will be synchronized and inserted to the destination collection 
+	 *                	   List of Documents which will be synchronized and inserted to the destination collection 
 	 * @param sender
-	 *              RabbitMQ sender which will be used to save/produce the synchronized document id with the appropriate procedure (insert in this case ) 
-	 *  
-	 *               @return 
-	 *                boolean True when the synchronization and insertion processes are completed successfully .False otherwise.
+	 *             		   RabbitMQ sender which will be used to save/produce the synchronized document id with the appropriate procedure (insert in this case ) 
+	 *  	
+	 *  @return 
+	               			boolean True when the synchronization and insertion processes are completed successfully .False otherwise.
 	 */ 
 	public boolean syncronizeInsertionOneByOne(List<IDocument> newDocuments,
 			ICollection sourceCollection, ICollection destinatCollection ,RabbitMQSender sender)  {

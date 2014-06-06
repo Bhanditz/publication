@@ -7,8 +7,8 @@ import java.util.Map;
 /**
  * 
  * ICollection.java
- * Purpose: The interface that should be implemented by the source and the destination collections 
- * Contain all the template methods which are needed for the synchronization mechanism 
+ * Purpose: The interface which should be implemented by the source and the destination collections 
+ * Contains all the template methods which are needed for the synchronization mechanism 
  *  
  *
  * @author Tarek Alkhaeir
@@ -24,11 +24,11 @@ public interface ICollection {
 	 *                 list of state filed values for documents which will be returned
 	 *@param queryChoices
 	 *      		    map with keys and 
-						list of values related to those keys ,this variable could be used to specify the  query 
-						when selecting the documents to be synchronized .Examples of keys will be (collection -dataSet
+						list of values related to each of those keys, this variable could be used to specify the (where clause) query filter
+						when selecting the documents to be synchronized .Examples of such keys will be (collection -dataSet
 	 *                                   
 	 *@param   batchSize
-	 *                 the number of documents which will be returned   
+	 *                 the number of documents which will be returned each time the query is executed   
 	 * 
 	 *@return   list of documents                 
 	 */                     
