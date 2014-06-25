@@ -38,7 +38,7 @@ public interface ICollection {
 	
 	
 	          
-	abstract public IDocument getDocumentById(String id);
+	abstract public IDocument getDocumentById(IDocument id);
 	
 
 	abstract public void insertDocument(IDocument document);

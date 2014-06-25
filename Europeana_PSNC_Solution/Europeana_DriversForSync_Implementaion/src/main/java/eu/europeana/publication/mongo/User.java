@@ -92,4 +92,14 @@ public class User implements IDocument ,Serializable {
 
 	// getter, setter, toString, Constructors
 
+    @Override
+    public void setClassType(String classType) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getClassType() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

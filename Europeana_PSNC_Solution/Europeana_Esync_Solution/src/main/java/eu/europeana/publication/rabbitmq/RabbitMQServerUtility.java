@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.europeana.publication.common.IDocument;
+
 /**
  * 
  * RabbitMQServerUtility.java
@@ -30,7 +32,7 @@ public class RabbitMQServerUtility {
 	 *                 
 	 *@throws IOException                                  
       */ 
-	public byte[] produceHashMap(Map<String, String> map) throws IOException {
+	public byte[] produceHashMap(Map<IDocument, String> map) throws IOException {
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -52,14 +54,14 @@ public class RabbitMQServerUtility {
 	 *                 
 	 *@throws IOException                                  
       */ 
-	public Map<String, String> consumeHashMap(byte[] bytes) throws IOException,ClassNotFoundException  {
+	public Map<IDocument, String> consumeHashMap(byte[] bytes) throws IOException,ClassNotFoundException  {
 
-		Map<String, String> map = null;
+		Map<IDocument, String> map = null;
 
 		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 		ObjectInputStream obj = new ObjectInputStream(bais);
 		Object object = obj.readObject();
-		map = (HashMap<String, String>) object;
+		map = (HashMap<IDocument, String>) object;
 		obj.close();
 
 		return map;

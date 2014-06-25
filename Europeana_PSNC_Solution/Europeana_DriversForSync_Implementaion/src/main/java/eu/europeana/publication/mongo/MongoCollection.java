@@ -94,10 +94,10 @@ public class MongoCollection implements ICollection {
 
 	}
 
-	public IDocument getDocumentById(String id) {
+	public IDocument getDocumentById(IDocument id) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("_id").is(id));
+		query2.addCriteria(Criteria.where("_id").is(id.getId()));
 		IDocument userTest2 = mongoOperation.findOne(query2, collectionName.getClass());
 
 		return userTest2;

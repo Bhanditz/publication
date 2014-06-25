@@ -22,4 +22,7 @@ public interface IDocument {
 	
 	public void setId(String id);
 
+        public void setClassType(String classType);
+        
+        public String getClassType();
 }
