@@ -59,16 +59,18 @@ public class SecondStageSycrhonizer {
 
 			reciever.getChannel().basicConsume(reciever.getEndPointName(),
 					true, consumer);
-			Map<String, String> map;
+			Map<IDocument, String> map;
 
 			while (true) {
 				try {
 
 					map = reciever.recieveMessage(utility, consumer);
 
-					for (String key : map.keySet()) {
+					for (IDocument key : map.keySet()) {
 
 						if (map.get(key).equals("insert")) {
+							
+							
 							IDocument sourceDocument = sourceCollection
 									.getDocumentById(key);
 							destinationCollection

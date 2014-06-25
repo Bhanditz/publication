@@ -56,7 +56,7 @@ public class FirstStageUtility {
 	 *               
 	 */    
 	public void UpdateDocumentStateFieldByDocumentId(ICollection collection,
-			String documentId, State newState)  {
+			IDocument documentId, State newState)  {
 		
 
 			IDocument document = collection.getDocumentById(documentId);
@@ -89,12 +89,12 @@ public class FirstStageUtility {
 			IDocument sourceDocument,RabbitMQSender sender) throws IOException {
 		
 		
-	     Map <String,String > queueForRabbitMQ =new HashMap<String,String>();
+	     Map <IDocument,String > queueForRabbitMQ =new HashMap<IDocument,String>();
 		
 	     RabbitMQServerUtility rabitMQUtil =new RabbitMQServerUtility();
 
 		IDocument destinationDocument = destinationCollection
-				.getDocumentById(sourceDocument.getId());
+				.getDocumentById(sourceDocument);
 
 		if (destinationDocument != null) {
 
@@ -108,7 +108,7 @@ public class FirstStageUtility {
 				destinationCollection
 						.updateDocumentUsingId(destinationDocument);
 				
-				queueForRabbitMQ.put(destinationDocument.getId(), "update");
+				queueForRabbitMQ.put(destinationDocument, "update");
 
 			} else
 
@@ -118,7 +118,7 @@ public class FirstStageUtility {
 					destinationCollection
 					.updateDocumentUsingId(destinationDocument);
 					
-					queueForRabbitMQ.put(destinationDocument.getId(), "delete");
+					queueForRabbitMQ.put(destinationDocument, "delete");
 
 				}
 
@@ -128,7 +128,7 @@ public class FirstStageUtility {
 					destinationCollection
 					.updateDocumentUsingId(destinationDocument);
 					
-					queueForRabbitMQ.put(destinationDocument.getId(), "delete");
+					queueForRabbitMQ.put(destinationDocument, "delete");
 				}
 			sourceCollection.updateDocumentUsingId(sourceDocument);
 			
@@ -168,7 +168,7 @@ public class FirstStageUtility {
 		  boolean completed =true;
 		  Iterator<IDocument> it = newDocuments.iterator();
 		
-		  Map <String,String > queueForRabbitMQ =new HashMap<String,String>();
+		  Map <IDocument,String > queueForRabbitMQ =new HashMap<IDocument,String>();
 		
 	      RabbitMQServerUtility rabitMQUtil =new RabbitMQServerUtility();
 		
@@ -181,7 +181,7 @@ public class FirstStageUtility {
 					destinatCollection.insertDocument(document);
 					sourceCollection.updateDocumentUsingId(document);
 					
-					queueForRabbitMQ.put(document.getId(),"insert");
+					queueForRabbitMQ.put(document,"insert");
 					
 					byte [] bytes =rabitMQUtil.produceHashMap(queueForRabbitMQ);
 					
