@@ -90,11 +90,18 @@ public class User implements IDocument ,Serializable {
 		this.password = password;
 	}
 
-	public String getType() {
-		// TODO Auto-generated method stub
-		return "User";
-	}
+	
 
 	// getter, setter, toString, Constructors
+
+   
+    public void setClassType(String classType) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
+    public String getClassType() {
+        return "User"; //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

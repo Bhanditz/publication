@@ -12,7 +12,7 @@ package eu.europeana.publication.common;
  * @author Tarek Alkhaeir
  * @version 1.0.0
  */
-public interface IDocument {
+public interface IDocument extends Cloneable{
 
 	public void setState(State state);
 
@@ -22,7 +22,7 @@ public interface IDocument {
 	
 	public void setId(String id);
 	
-	public String getType();
-	
-
+    public void setClassType(String classType);
+        
+    public String getClassType();
 }

@@ -34,8 +34,9 @@
   <version>0.0.1-SNAPSHOT</version>
   
   </dependency>
-  
-  </dependencies>
+
+		
+ </dependencies>
   <build>
     <finalName>Europeana_Esync_RestService</finalName>
   </build>

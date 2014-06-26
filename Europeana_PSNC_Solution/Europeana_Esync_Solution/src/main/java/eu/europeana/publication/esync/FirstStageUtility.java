@@ -111,7 +111,7 @@ public class FirstStageUtility {
 						.updateDocumentUsingId(destinationDocument);
 				
 				rabbitMQList.add("update");
-				rabbitMQList.add(sourceDocument.getType());
+				rabbitMQList.add(sourceDocument.getClassType());
 				queueForRabbitMQ.put(destinationDocument.getId(),rabbitMQList);
 
 			} else
@@ -123,7 +123,7 @@ public class FirstStageUtility {
 					.updateDocumentUsingId(destinationDocument);
 					
 					rabbitMQList.add("delete");
-					rabbitMQList.add(sourceDocument.getType());
+					rabbitMQList.add(sourceDocument.getClassType());
 					queueForRabbitMQ.put(destinationDocument.getId(), rabbitMQList);
 
 				}
@@ -135,7 +135,7 @@ public class FirstStageUtility {
 					.updateDocumentUsingId(destinationDocument);
 					
 					rabbitMQList.add("delete");
-					rabbitMQList.add(sourceDocument.getType());
+					rabbitMQList.add(sourceDocument.getClassType());
 					queueForRabbitMQ.put(destinationDocument.getId(), rabbitMQList);
 				}
 			sourceCollection.updateDocumentUsingId(sourceDocument);
@@ -193,7 +193,7 @@ public class FirstStageUtility {
 					
 					
 					rabbitMQList.add("insert");
-					rabbitMQList.add(document.getType());
+					rabbitMQList.add(document.getClassType());
 					queueForRabbitMQ.put(document.getId(),rabbitMQList);
 					
 					byte [] bytes =rabitMQUtil.produceHashMap(queueForRabbitMQ);
