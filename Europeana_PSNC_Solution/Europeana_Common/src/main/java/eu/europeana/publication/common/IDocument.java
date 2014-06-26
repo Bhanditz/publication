@@ -12,7 +12,7 @@ package eu.europeana.publication.common;
  * @author Tarek Alkhaeir
  * @version 1.0.0
  */
-public interface IDocument {
+public interface IDocument extends Cloneable{
 
 	public void setState(State state);
 
