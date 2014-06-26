@@ -78,7 +78,7 @@ public class FirstStageSynhcronizer {
 					while (iterator.hasNext()) {
 
 						IDocument document = iterator.next();
-						System.out.println(document.getId());
+						//System.out.println(document.getId());
 						
 						// if the document is not in destination collection,that
 						// mean, it is a new document.

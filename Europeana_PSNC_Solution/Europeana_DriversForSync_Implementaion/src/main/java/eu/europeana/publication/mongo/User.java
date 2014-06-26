@@ -90,6 +90,11 @@ public class User implements IDocument ,Serializable {
 		this.password = password;
 	}
 
+	public String getType() {
+		// TODO Auto-generated method stub
+		return "User";
+	}
+
 	// getter, setter, toString, Constructors
 
 }

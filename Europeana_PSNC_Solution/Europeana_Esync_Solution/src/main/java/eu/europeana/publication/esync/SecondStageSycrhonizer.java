@@ -1,6 +1,7 @@
 package eu.europeana.publication.esync;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
@@ -59,7 +60,7 @@ public class SecondStageSycrhonizer {
 
 			reciever.getChannel().basicConsume(reciever.getEndPointName(),
 					true, consumer);
-			Map<String, String> map;
+			Map<String, List<String>> map;
 
 			while (true) {
 				try {
@@ -68,13 +69,13 @@ public class SecondStageSycrhonizer {
 
 					for (String key : map.keySet()) {
 
-						if (map.get(key).equals("insert")) {
+						if (map.get(key).get(0).equals("insert")) {
 							IDocument sourceDocument = sourceCollection
 									.getDocumentById(key);
 							destinationCollection
 									.insertDocument(sourceDocument);
 
-						} else if (map.get(key).equals("update")) {
+						} else if (map.get(key).get(0).equals("update")) {
 							IDocument sourceDocument = sourceCollection
 									.getDocumentById(key);
 							destinationCollection
@@ -82,7 +83,7 @@ public class SecondStageSycrhonizer {
 
 						}
 
-						else if (map.get(key).equals("delete")) {
+						else if (map.get(key).get(0).equals("delete")) {
 							IDocument sourceDocument = sourceCollection
 									.getDocumentById(key);
 							destinationCollection

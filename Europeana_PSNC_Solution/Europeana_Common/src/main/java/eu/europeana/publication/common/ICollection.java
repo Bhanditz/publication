@@ -25,7 +25,7 @@ public interface ICollection {
 	 *@param queryChoices
 	 *      		    map with keys and 
 						list of values related to each of those keys, this variable could be used to specify the (where clause) query filter
-						when selecting the documents to be synchronized .Examples of such keys will be (collection -dataSet
+						when selecting the documents to be synchronized .Examples of such keys could be (collection -dataSet
 	 *                                   
 	 *@param   batchSize
 	 *                 the number of documents which will be returned each time the query is executed   

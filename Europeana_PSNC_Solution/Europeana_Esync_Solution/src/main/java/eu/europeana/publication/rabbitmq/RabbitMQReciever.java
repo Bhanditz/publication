@@ -1,6 +1,7 @@
 package eu.europeana.publication.rabbitmq;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
@@ -39,7 +40,7 @@ public class RabbitMQReciever extends RabbitMQEndPoint {
 	 *@throws InterruptedException , IOException , ClassNotFoundException
 	 *                  re throws RabbitMQ api exceptions                            
       */ 
-	public Map<String, String> recieveMessage(RabbitMQServerUtility util,
+	public Map<String, List<String>> recieveMessage(RabbitMQServerUtility util,
 			QueueingConsumer consumer) throws InterruptedException,TimeoutException,
 			IOException, ClassNotFoundException {
 
@@ -53,7 +54,7 @@ public class RabbitMQReciever extends RabbitMQEndPoint {
 
 		byte[] bytes = delivery.getBody();
 
-		Map<String, String> map = util.consumeHashMap(bytes);
+		Map<String, List<String>> map = util.consumeHashMap(bytes);
 		
 		return map;
 	}

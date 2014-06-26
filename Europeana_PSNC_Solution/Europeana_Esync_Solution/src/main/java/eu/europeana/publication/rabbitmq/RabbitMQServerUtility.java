@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +31,7 @@ public class RabbitMQServerUtility {
 	 *                 
 	 *@throws IOException                                  
       */ 
-	public byte[] produceHashMap(Map<String, String> map) throws IOException {
+	public byte[] produceHashMap(Map<String, List<String>> map) throws IOException {
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -52,14 +53,14 @@ public class RabbitMQServerUtility {
 	 *                 
 	 *@throws IOException                                  
       */ 
-	public Map<String, String> consumeHashMap(byte[] bytes) throws IOException,ClassNotFoundException  {
+	public Map<String, List<String>> consumeHashMap(byte[] bytes) throws IOException,ClassNotFoundException  {
 
-		Map<String, String> map = null;
+		Map<String, List<String>> map = null;
 
 		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 		ObjectInputStream obj = new ObjectInputStream(bais);
 		Object object = obj.readObject();
-		map = (HashMap<String, String>) object;
+		map = (HashMap<String, List<String>>) object;
 		obj.close();
 
 		return map;

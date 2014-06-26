@@ -1,6 +1,7 @@
 package eu.europeana.publication.esync;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -89,7 +90,8 @@ public class FirstStageUtility {
 			IDocument sourceDocument,RabbitMQSender sender) throws IOException {
 		
 		
-	     Map <String,String > queueForRabbitMQ =new HashMap<String,String>();
+		Map <String, List<String>> queueForRabbitMQ =new HashMap<String, List<String>>();
+	  	 List <String> rabbitMQList =new ArrayList<String>();
 		
 	     RabbitMQServerUtility rabitMQUtil =new RabbitMQServerUtility();
 
@@ -108,7 +110,9 @@ public class FirstStageUtility {
 				destinationCollection
 						.updateDocumentUsingId(destinationDocument);
 				
-				queueForRabbitMQ.put(destinationDocument.getId(), "update");
+				rabbitMQList.add("update");
+				rabbitMQList.add(sourceDocument.getType());
+				queueForRabbitMQ.put(destinationDocument.getId(),rabbitMQList);
 
 			} else
 
@@ -118,7 +122,9 @@ public class FirstStageUtility {
 					destinationCollection
 					.updateDocumentUsingId(destinationDocument);
 					
-					queueForRabbitMQ.put(destinationDocument.getId(), "delete");
+					rabbitMQList.add("delete");
+					rabbitMQList.add(sourceDocument.getType());
+					queueForRabbitMQ.put(destinationDocument.getId(), rabbitMQList);
 
 				}
 
@@ -128,7 +134,9 @@ public class FirstStageUtility {
 					destinationCollection
 					.updateDocumentUsingId(destinationDocument);
 					
-					queueForRabbitMQ.put(destinationDocument.getId(), "delete");
+					rabbitMQList.add("delete");
+					rabbitMQList.add(sourceDocument.getType());
+					queueForRabbitMQ.put(destinationDocument.getId(), rabbitMQList);
 				}
 			sourceCollection.updateDocumentUsingId(sourceDocument);
 			
@@ -136,6 +144,7 @@ public class FirstStageUtility {
             byte [] bytes =rabitMQUtil.produceHashMap(queueForRabbitMQ);
 			
             queueForRabbitMQ.clear();
+            rabbitMQList.clear();
 			sender.sendMessage(bytes);
 			
 			return true;
@@ -168,9 +177,10 @@ public class FirstStageUtility {
 		  boolean completed =true;
 		  Iterator<IDocument> it = newDocuments.iterator();
 		
-		  Map <String,String > queueForRabbitMQ =new HashMap<String,String>();
+		  Map <String, List<String>> queueForRabbitMQ =new HashMap<String, List<String>>();
 		
 	      RabbitMQServerUtility rabitMQUtil =new RabbitMQServerUtility();
+	      List <String> rabbitMQList =new ArrayList<String>();
 		
 		while (it.hasNext()) {
 			try {
@@ -181,11 +191,15 @@ public class FirstStageUtility {
 					destinatCollection.insertDocument(document);
 					sourceCollection.updateDocumentUsingId(document);
 					
-					queueForRabbitMQ.put(document.getId(),"insert");
+					
+					rabbitMQList.add("insert");
+					rabbitMQList.add(document.getType());
+					queueForRabbitMQ.put(document.getId(),rabbitMQList);
 					
 					byte [] bytes =rabitMQUtil.produceHashMap(queueForRabbitMQ);
 					
 		            queueForRabbitMQ.clear();
+		            rabbitMQList.clear();
 					sender.sendMessage(bytes);
 					
 
